@@ -16,7 +16,10 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@vernaly/schema": ["libs/schema/src/index.ts"]
+      "@vernaly/schema": ["libs/schema/src/index.ts"],
+      "@vernaly/tenant-drizzle-client": [
+        "libs/tenant-drizzle-client/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

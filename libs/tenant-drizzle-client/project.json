@@ -1,0 +1,20 @@
+{
+  "name": "tenant-drizzle-client",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/tenant-drizzle-client/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/tenant-drizzle-client",
+        "tsConfig": "libs/tenant-drizzle-client/tsconfig.lib.json",
+        "packageJson": "libs/tenant-drizzle-client/package.json",
+        "main": "libs/tenant-drizzle-client/src/index.ts",
+        "assets": ["libs/tenant-drizzle-client/*.md"]
+      }
+    }
+  }
+}
