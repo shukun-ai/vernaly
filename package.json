@@ -5,10 +5,12 @@
   "scripts": {},
   "private": true,
   "devDependencies": {
+    "@nestjs/schematics": "^10.0.1",
     "@nx/eslint": "19.6.4",
     "@nx/eslint-plugin": "19.6.4",
     "@nx/jest": "19.6.4",
     "@nx/js": "19.6.4",
+    "@nx/nest": "19.6.4",
     "@nx/node": "19.6.4",
     "@nx/workspace": "19.6.4",
     "@swc-node/register": "~1.9.1",
@@ -30,9 +32,11 @@
     "verdaccio": "^5.0.4"
   },
   "dependencies": {
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "zod": "^3.23.8"
   },
   "nx": {
     "includedScripts": []
-  }
+  },
+  "packageManager": "pnpm@9.9.0+sha512.60c18acd138bff695d339be6ad13f7e936eea6745660d4cc4a776d5247c540d0edee1a563695c183a66eb917ef88f2b4feb1fc25f32a7adcadc7aaf3438e99c1"
 }
