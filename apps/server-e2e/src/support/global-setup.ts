@@ -1,10 +1,25 @@
-/* eslint-disable */
-var __TEARDOWN_MESSAGE__: string;
+import { join } from 'path';
+import { v2 } from 'docker-compose';
+import isPortReachable from 'is-port-reachable';
 
 module.exports = async function () {
-  // Start services that that the app needs to run (e.g. database, docker-compose, etc.).
-  console.log('\nSetting up...\n');
+  const dockerComposeVersion = await v2.version();
 
-  // Hint: Use `globalThis` to pass variables to global teardown.
-  globalThis.__TEARDOWN_MESSAGE__ = '\nTearing down...\n';
+  console.log('dockerComposeVersion', dockerComposeVersion);
+
+  process.env.TENANT_DB_HOST = 'localhost';
+  process.env.TENANT_DB_PORT = '25532';
+  process.env.TENANT_DB_USER = 'test';
+  process.env.TENANT_DB_PASSWORD = 'test';
+  process.env.TENANT_DB_DATABASE = 'test';
+  process.env.TENANT_DB_SCHEMA = 'public';
+
+  const isDBReachable = await isPortReachable(20000);
+
+  if (!isDBReachable) {
+    await v2.upAll({
+      cwd: join(__dirname),
+      log: true,
+    });
+  }
 };
