@@ -19,7 +19,8 @@
       "@vernaly/schema": ["libs/schema/src/index.ts"],
       "@vernaly/tenant-drizzle-client": [
         "libs/tenant-drizzle-client/src/index.ts"
-      ]
+      ],
+      "@vernaly/utils": ["libs/utils/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
