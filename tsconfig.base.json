@@ -16,6 +16,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@vernaly/exceptions": ["libs/exceptions/src/index.ts"],
       "@vernaly/schema": ["libs/schema/src/index.ts"],
       "@vernaly/tenant-drizzle-client": [
         "libs/tenant-drizzle-client/src/index.ts"
