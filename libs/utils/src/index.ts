@@ -1,1 +1,1 @@
-export * from './lib/utils';
+export * from './entity-id/entity-id';
