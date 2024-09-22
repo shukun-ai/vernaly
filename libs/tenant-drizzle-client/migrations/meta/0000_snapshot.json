@@ -1,5 +1,5 @@
 {
-  "id": "003013c4-4f67-4453-ade6-31eb08065205",
+  "id": "9519423f-9a72-4caa-be0f-525142bc99a5",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -15,6 +15,49 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "label": {
+          "name": "label",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "dbUri": {
+          "name": "dbUri",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lightLogo": {
+          "name": "lightLogo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "darkLogo": {
+          "name": "darkLogo",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "mainColor": {
+          "name": "mainColor",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "metadata": {
+          "name": "metadata",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::jsonb"
+        },
         "createdAt": {
           "name": "createdAt",
           "type": "timestamp(3)",
@@ -27,18 +70,6 @@
           "type": "timestamp(3)",
           "primaryKey": false,
           "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "dbUri": {
-          "name": "dbUri",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {
