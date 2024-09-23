@@ -1,4 +1,4 @@
-name: Publish
+name: CI
 on:
   push:
     branches: [main]
@@ -29,7 +29,7 @@ jobs:
             ~/.cache/Cypress # needed for the Cypress binary
           key: npm-dependencies-${{ hashFiles('pnpm-lock.yaml') }}
 
-      - run: pnpm install --frozen-lockfile
+      - run: pnpm install
 
       - name: Cache npm dependencies
         uses: actions/cache/save@v4
