@@ -3,6 +3,8 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "start": "nx run-many -t serve",
+    "build": "nx affected -t build",
     "lint": "nx affected -t lint",
     "lint:fix": "nx run-many -t lint --fix",
     "test": "nx affected -t test",
