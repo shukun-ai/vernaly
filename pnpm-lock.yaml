@@ -18,6 +18,7 @@ specifiers:
   '@swc-node/register': ~1.9.1
   '@swc/core': ~1.5.7
   '@swc/helpers': ~0.5.11
+  '@swc/jest': ^0.2.36
   '@types/jest': ^29.5.12
   '@types/node': 18.16.9
   '@types/pg': ^8.11.10
@@ -38,6 +39,7 @@ specifiers:
   prettier: ^2.6.2
   reflect-metadata: ^0.1.13
   rxjs: ^7.8.0
+  swc-loader: ^0.2.6
   ts-jest: ^29.1.0
   ts-node: 10.9.1
   tslib: ^2.3.0
@@ -74,6 +76,7 @@ devDependencies:
   '@swc-node/register': 1.9.2_yhjebbnt223q5ttxk4qw7bhgzu
   '@swc/core': 1.5.29_@swc+helpers@0.5.13
   '@swc/helpers': 0.5.13
+  '@swc/jest': 0.2.36_@swc+core@1.5.29
   '@types/jest': 29.5.13
   '@types/node': 18.16.9
   '@types/pg': 8.11.10
@@ -88,6 +91,7 @@ devDependencies:
   jest-environment-node: 29.7.0
   nx: 19.8.0_4mb5onp6karsdhe2e442dextne
   prettier: 2.8.8
+  swc-loader: 0.2.6_lemcd2hfihx7zmyg6sjev4jp3u
   ts-jest: 29.2.5_t5vy2wcjmobyn6k2u4rcszhd7e
   ts-node: 10.9.1_bypo77lq2afciat4qqm6ceivq4
   typescript: 5.5.4
@@ -2113,6 +2117,13 @@ packages:
       - ts-node
     dev: true
 
+  /@jest/create-cache-key-function/29.7.0:
+    resolution: {integrity: sha512-4QqS3LY5PBmTRHj9sAg1HLoPzqAI0uOX6wI/TRqHIcOxlFidy6YEmCQJk6FSZjNLGCeubDMfmkWL+qaLKhSGQA==}
+    engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
+    dependencies:
+      '@jest/types': 29.6.3
+    dev: true
+
   /@jest/environment/29.7.0:
     resolution: {integrity: sha512-aQIfHDq33ExsN4jP1NWGXhxgQ/wixs60gDiKO+XVMd8Mn0NWPWgc34ZQDTb2jKaUWQ7MuwoitXAsN2XVXNMpAw==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
@@ -3547,6 +3558,18 @@ packages:
     resolution: {integrity: sha512-UoKGxQ3r5kYI9dALKJapMmuK+1zWM/H17Z1+iwnNmzcJRnfFuevZs375TA5rW31pu4BS4NoSy1fRsexDXfWn5w==}
     dependencies:
       tslib: 2.7.0
+    dev: true
+
+  /@swc/jest/0.2.36_@swc+core@1.5.29:
+    resolution: {integrity: sha512-8X80dp81ugxs4a11z1ka43FPhP+/e+mJNXJSxiNYk8gIX/jPBtY4gQTrKu/KIoco8bzKuPI5lUxjfLiGsfvnlw==}
+    engines: {npm: '>= 7.0.0'}
+    peerDependencies:
+      '@swc/core': '*'
+    dependencies:
+      '@jest/create-cache-key-function': 29.7.0
+      '@swc/core': 1.5.29_@swc+helpers@0.5.13
+      '@swc/counter': 0.1.3
+      jsonc-parser: 3.3.1
     dev: true
 
   /@swc/types/0.1.12:
@@ -10778,6 +10801,17 @@ packages:
       css-what: 6.1.0
       csso: 5.0.5
       picocolors: 1.1.0
+    dev: true
+
+  /swc-loader/0.2.6_lemcd2hfihx7zmyg6sjev4jp3u:
+    resolution: {integrity: sha512-9Zi9UP2YmDpgmQVbyOPJClY0dwf58JDyDMQ7uRc4krmc72twNI2fvlBWHLqVekBpPc7h5NJkGVT1zNDxFrqhvg==}
+    peerDependencies:
+      '@swc/core': ^1.2.147
+      webpack: '>=2'
+    dependencies:
+      '@swc/core': 1.5.29_@swc+helpers@0.5.13
+      '@swc/counter': 0.1.3
+      webpack: 5.94.0_hgodsfu7j3bpb3zxki7h4feeqi
     dev: true
 
   /tapable/2.2.1:

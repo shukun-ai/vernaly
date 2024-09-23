@@ -17,4 +17,18 @@ module.exports = {
       generatePackageJson: true,
     }),
   ],
+  module: {
+    rules: [
+      {
+        test: /\.ts$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'swc-loader',
+          options: {
+            swcrc: true,
+          },
+        },
+      },
+    ],
+  },
 };
