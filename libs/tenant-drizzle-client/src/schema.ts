@@ -24,7 +24,9 @@ export const tenants = pgTable(
     updatedAt: timestamp('updatedAt', {
       precision: 3,
       mode: 'string',
-    }).notNull(),
+    })
+      .notNull()
+      .defaultNow(),
   },
   (table) => {
     return {

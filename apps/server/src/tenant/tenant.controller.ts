@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { TenantService } from './tenant.service';
+import { TenantModel } from './tenant.service.interface';
 
 @Controller('tenant')
 export class TenantController {
@@ -7,14 +8,12 @@ export class TenantController {
 
   @Get()
   async findAll(): Promise<unknown> {
-    console.log('This action returns all tenants');
-    return await this.tenantService.get('name35');
-    // return 'sss';
+    return 'a';
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string): string {
-    return `This action returns a tenant with id ${id}`;
+  @Get(':tenantName')
+  async findOne(@Param('tenantName') tenantName: string): Promise<TenantModel> {
+    return await this.tenantService.findOne(tenantName);
   }
 
   @Post()

@@ -1,7 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { MetadataSchema } from '@vernaly/schema';
-import { ITenantService } from './tenant.service.interface';
+import { ITenantService, TenantModel } from './tenant.service.interface';
 import { TenantDrizzleClientService } from '@vernaly/tenant-drizzle-client';
+import { eq } from 'drizzle-orm';
+import { tenants } from '@vernaly/tenant-drizzle-client';
+import { NotFoundError } from '@vernaly/exceptions';
+import { getEntityId } from '@vernaly/utils';
 
 @Injectable()
 export class TenantService implements ITenantService {
@@ -9,7 +13,7 @@ export class TenantService implements ITenantService {
     private readonly tenantDrizzleClientService: TenantDrizzleClientService
   ) {}
 
-  async create(props: {
+  async insert(props: {
     name: string;
     label: string;
     db: {
@@ -21,22 +25,38 @@ export class TenantService implements ITenantService {
       password: string;
     };
   }): Promise<{ tenantId: string }> {
-    return { tenantId: 'xx' };
+    const tenantId = getEntityId();
+
+    await this.tenantDrizzleClientService.db.insert(tenants).values({
+      tenantId,
+      name: props.name,
+      label: props.label,
+    });
+    // TODO create tenant-history
+    // TODO create tenant owner account
+
+    return {
+      tenantId,
+    };
   }
 
-  async get(tenantName: string): Promise<{
-    tenantId: string;
-    name: string;
-    label: string;
-    lightLogo: string | null;
-    darkLogo: string | null;
-    mainColor: string | null;
-    metadata: MetadataSchema;
-  }> {
+  async findOne(tenantName: string): Promise<TenantModel> {
     const tenant =
-      await this.tenantDrizzleClientService.db.query.tenants.findFirst();
-    console.log('tenant2', tenant);
-    return tenant as any;
+      await this.tenantDrizzleClientService.db.query.tenants.findFirst({
+        where: eq(tenants.name, tenantName),
+      });
+
+    if (!tenant) {
+      throw new NotFoundError('Not found tenant: {{tenantName}}', {
+        tenantName,
+      });
+    }
+
+    return {
+      ...tenant,
+      theme: {},
+      metadata: tenant.metadata as MetadataSchema,
+    };
   }
 
   async update(

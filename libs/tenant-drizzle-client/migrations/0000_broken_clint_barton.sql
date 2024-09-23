@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS "tenants" (
 	"mainColor" text,
 	"metadata" jsonb DEFAULT '{}'::jsonb NOT NULL,
 	"createdAt" timestamp(3) DEFAULT now() NOT NULL,
-	"updatedAt" timestamp(3) NOT NULL
+	"updatedAt" timestamp(3) DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX IF NOT EXISTS "tenants_name_index" ON "tenants" USING btree ("name");

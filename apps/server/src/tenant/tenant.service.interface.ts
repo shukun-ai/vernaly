@@ -1,37 +1,44 @@
-import { MetadataSchema } from "@vernaly/schema";
+import { MetadataSchema } from '@vernaly/schema';
+
+export type TenantModel = {
+  tenantId: string;
+  name: string;
+  label: string;
+  theme: {
+    lightLogo?: string;
+    darkLogo?: string;
+    mainColor?: string;
+  };
+  metadata: MetadataSchema;
+};
 
 export interface ITenantService {
-    create (props: {
-        name: string;
-        label: string;
-        db: {
-            uri: string,
-            prefix: string,
-        },
-        owner: {
-            username: string,
-            password: string,
-        }
-    }): Promise<{tenantId: string}>
+  insert(props: {
+    name: string;
+    label: string;
+    db: {
+      uri: string;
+      prefix: string;
+    };
+    owner: {
+      username: string;
+      password: string;
+    };
+  }): Promise<{ tenantId: string }>;
 
-    get (tenantName: string): Promise<{
-        tenantId: string;
-        name: string
-        label: string;
-        lightLogo: string | null;
-        darkLogo: string | null;
-        mainColor: string | null;
-        metadata: MetadataSchema
-    }>
+  findOne(tenantName: string): Promise<TenantModel>;
 
-    update (tenantName: string, props: {
-        label: string;
-        lightLogo?: string;
-        darkLogo?: string;
-        mainColor?: string;
-    }):Promise<null>
+  update(
+    tenantName: string,
+    props: {
+      label: string;
+      lightLogo?: string;
+      darkLogo?: string;
+      mainColor?: string;
+    }
+  ): Promise<null>;
 
-    updateMetadata (tenantName: string, metadata: MetadataSchema): Promise<null>
+  updateMetadata(tenantName: string, metadata: MetadataSchema): Promise<null>;
 
-    destroy (tenantName: string): Promise<null>
+  destroy(tenantName: string): Promise<null>;
 }
