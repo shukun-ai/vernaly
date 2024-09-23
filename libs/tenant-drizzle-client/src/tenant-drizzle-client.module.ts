@@ -1,8 +1,9 @@
 import { Module, DynamicModule } from '@nestjs/common';
+import { TenantDrizzleClientService } from './tenant-drizzle-client.service';
 import {
-  TenantDrizzleClientService,
-} from './tenant-drizzle-client.service';
-import { TENANT_DRIZZLE_CLIENT_CONFIG, TenantDrizzleClientConfig } from './provider';
+  TENANT_DRIZZLE_CLIENT_CONFIG,
+  TenantDrizzleClientConfig,
+} from './provider';
 
 @Module({})
 export class TenantDrizzleClientModule {
