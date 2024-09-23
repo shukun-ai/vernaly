@@ -1,4 +1,8 @@
 {
   "name": "@vernaly/utils",
-  "version": "0.0.1"
+  "version": "0.0.1",
+  "dependencies": {
+    "nanoid": "^3.3.6",
+    "tslib": "^2.3.0"
+  }
 }

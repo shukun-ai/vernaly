@@ -1,42 +1,185 @@
-name: CI
-
+name: Publish
 on:
   push:
-    branches:
-      - master
-  pull_request:
-
-permissions:
-  actions: read
-  contents: read
-
+    branches: [main]
+  workflow_dispatch:
 jobs:
-  main:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.15.0'
+
+      - name: Restore cached npm dependencies
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            node_modules
+            ~/.cache/Cypress # needed for the Cypress binary
+          key: npm-dependencies-${{ hashFiles('pnpm-lock.yaml') }}
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Cache npm dependencies
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            node_modules
+            ~/.cache/Cypress # needed for the Cypress binary
+          key: npm-dependencies-${{ hashFiles('pnpm-lock.yaml') }}
+
+      - run: npm run lint
+      - run: npm run test
+      - run: npm run build
+      - run: npm run package
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 1
+          if-no-files-found: error
+
+  publish-npm-packages:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
         with:
-          fetch-depth: 0
+          node-version: '20.14.0'
 
-      - uses: pnpm/action-setup@v4
+      - uses: actions/download-artifact@v4
         with:
-          version: 8
+          name: dist
+          path: dist/
 
-      # This enables task distribution via Nx Cloud
-      # Run this command as early as possible, before dependencies are installed
-      # Learn more at https://nx.dev/ci/reference/nx-cloud-cli#npx-nxcloud-startcirun
-      - run: pnpm dlx nx-cloud start-ci-run --distribute-on="3 linux-medium-js" --stop-agents-after="build"
-
-      # Cache node_modules
-      - uses: actions/setup-node@v4
+      - uses: JS-DevTools/npm-publish@v3
         with:
-          node-version: 20
-          cache: 'pnpm'
+          token: ${{ env.NPM_TOKEN }}
+          access: public
+          package: dist/libs/api/package.json
 
-      - run: pnpm install --frozen-lockfile
-      - uses: nrwl/nx-set-shas@v4
+      - uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ env.NPM_TOKEN }}
+          access: public
+          package: dist/libs/cli/package.json
 
-      # Prepend any command with "nx-cloud record --" to record its logs to Nx Cloud
-      # - run: pnpm exec nx-cloud record -- echo Hello World
-      # Nx Affected runs only tasks affected by the changes in this PR/commit. Learn more: https://nx.dev/ci/features/affected
-      - run: pnpm exec nx affected -t lint test build
+      - uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ env.NPM_TOKEN }}
+          access: public
+          package: dist/libs/code-resolver/package.json
+
+      - uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ env.NPM_TOKEN }}
+          access: public
+          package: dist/libs/exception/package.json
+
+      - uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ env.NPM_TOKEN }}
+          access: public
+          package: dist/libs/legacy-api/package.json
+
+      - uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ env.NPM_TOKEN }}
+          access: public
+          package: dist/libs/postmate/package.json
+
+      - uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ env.NPM_TOKEN }}
+          access: public
+          package: dist/libs/schema/package.json
+
+      - uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ env.NPM_TOKEN }}
+          access: public
+          package: dist/libs/util-functions/package.json
+
+      - uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ env.NPM_TOKEN }}
+          access: public
+          package: dist/libs/validator/package.json
+
+  publish-platform-docker:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ vars.SWR_REGISTRY }}
+          username: ${{ secrets.SWR_USERNAME }}
+          password: ${{ secrets.SWR_PASSWORD }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ vars.SWR_REGISTRY }}/shukun-dev/platform
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          target: platform
+
+  publish-hub-docker:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ vars.SWR_REGISTRY }}
+          username: ${{ secrets.SWR_USERNAME }}
+          password: ${{ secrets.SWR_PASSWORD }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ vars.SWR_REGISTRY }}/shukun-dev/hub
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          target: hub
