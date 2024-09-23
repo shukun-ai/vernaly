@@ -4,10 +4,10 @@
   "license": "MIT",
   "scripts": {
     "start": "nx run-many -t serve",
-    "build": "nx affected -t build",
-    "lint": "nx affected -t lint",
+    "build": "nx run-many -t build",
+    "lint": "nx run-many -t lint",
     "lint:fix": "nx run-many -t lint --fix",
-    "test": "nx affected -t test",
+    "test": "nx run-many -t test",
     "mgen": "pnpm run migration:generate",
     "migration:generate": "pnpm drizzle-kit generate --config=libs/tenant-drizzle-client/drizzle.config.ts",
     "prepare": "husky"
